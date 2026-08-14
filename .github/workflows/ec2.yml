@@ -2,7 +2,7 @@ name: EC2 Flask Deployment Workflow
 
 on:
   workflow_run:
-    workflows: ["Test Workflow"]
+    workflows: ["Test"]
     types:
       - completed
   workflow_dispatch:
