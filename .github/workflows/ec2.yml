@@ -1,4 +1,4 @@
-name: EC2 Deployment
+name: EC2 Flask Deployment Workflow
 
 on:
   workflow_run:
