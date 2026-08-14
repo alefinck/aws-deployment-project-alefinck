@@ -1,1 +1,29 @@
 name: EC2 Deployment
+
+on:
+  workflow_run:
+    workflows: ["Test Workflow"]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Flask App to EC2
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd ~/aws-deployment-project || cd ~/
+            git pull
+            bash resources/deploy_ec2.sh
